@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\4th Semester\\DevOps Implementation\\StringExtensions\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{217AE537-48A3-4FB6-8348-1D24F84E8347}|StringExtensions\\StringExtensions.csproj|c:\\4th semester\\devops implementation\\stringextensions\\stringextensions\\stringhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217AE537-48A3-4FB6-8348-1D24F84E8347}|StringExtensions\\StringExtensions.csproj|solutionrelative:stringextensions\\stringhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StringHelper.cs",
+              "DocumentMoniker": "C:\\4th Semester\\DevOps Implementation\\StringExtensions\\StringExtensions\\StringHelper.cs",
+              "RelativeDocumentMoniker": "StringExtensions\\StringHelper.cs",
+              "ToolTip": "C:\\4th Semester\\DevOps Implementation\\StringExtensions\\StringExtensions\\StringHelper.cs",
+              "RelativeToolTip": "StringExtensions\\StringHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-31T21:48:22.633Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
