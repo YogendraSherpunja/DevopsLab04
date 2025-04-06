@@ -9,23 +9,30 @@ trigger:
 pool:
   name: 'COMP367-Windows'
 
-variables: 
+variables:
   buildConfiguration: 'Release'
   Major: '1'
   Minor: '0'
   Patch: '0'
   PackageVersion: '$(Major).$(Minor).$(Patch)'  # Version for the NuGet package
   dotNetVersion: '8.0.x'  # .NET 8 version
-  projectPath: 'StringExtensions/StringExtensions.csproj'  # Path to your project file (update if needed)
-  POWERSHELL_DISTRIBUTION_CHANNEL: 'C:\Windows\System32\WindowsPowerShell\v1.0'
+  projectPath: 'StringExtensions/StringExtensions.csproj'  # Path to your project file
+
 steps:
+# Use cmd to download and run the .NET installer script
 - script: |
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version $(dotNetVersion)
-  displayName: 'Install .NET SDK via script'
+    mkdir -p %USERPROFILE%\.dotnet
+    curl -L https://aka.ms/dotnet/8.0/dotnet-sdk-win-x64.exe -o dotnet-installer.exe
+    dotnet-installer.exe /install /quiet /norestart
+    echo "##vso[task.prependpath]%USERPROFILE%\.dotnet"
+    echo "##vso[task.setvariable variable=DOTNET_ROOT]%USERPROFILE%\.dotnet"
+  displayName: 'Install .NET 8 SDK'
+  failOnStderr: true
+
 
 - task: DotNetCoreCLI@2  # Restore packages
   displayName: 'Restore'
-  inputs: 
+  inputs:
     command: 'restore'
     projects: '$(projectPath)'
 
@@ -63,4 +70,3 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
-
