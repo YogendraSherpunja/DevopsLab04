@@ -1,8 +1,3 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
 - main
 
@@ -13,13 +8,13 @@ variables:
   buildConfiguration: 'Release'
   Major: '1'
   Minor: '0'
-  Patch: '3'
-  PackageVersion: '$(Major).$(Minor).$(Patch)'  # Version for the NuGet package
-  dotNetVersion: '8.0.x'  # .NET 8 version
-  projectPath: 'StringExtensions/StringExtensions.csproj'  # Path to your project file
+  Patch: '$(Build.BuildId)'  # Automatically use build ID to avoid duplicates
+  PackageVersion: '$(Major).$(Minor).$(Patch)'
+  dotNetVersion: '8.0.x'
+  projectPath: 'StringExtensions/StringExtensions.csproj'
 
 steps:
-# Use cmd to download and run the .NET installer script
+
 - script: |
     echo "Checking for existing .NET SDK..."
     where dotnet
@@ -34,20 +29,26 @@ steps:
   displayName: 'Check and Install .NET 8 SDK if needed'
   failOnStderr: false
 
-- task: DotNetCoreCLI@2  # Restore packages
+- task: DotNetCoreCLI@2
   displayName: 'Restore'
   inputs:
     command: 'restore'
     projects: '$(projectPath)'
 
-- task: DotNetCoreCLI@2  # Build the solution
+- task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
     command: 'build'
     projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2  # Create NuGet package
+# Clean old artifacts before pack
+- script: |
+    echo "Cleaning artifact staging directory..."
+    rd /s /q "$(Build.ArtifactStagingDirectory)"
+  displayName: 'Clean artifact staging directory'
+
+- task: DotNetCoreCLI@2
   displayName: 'Pack'
   inputs:
     command: 'pack'
@@ -55,23 +56,10 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'PackageVersion'
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    nobuild: true  # Skip build since it's already done
+    nobuild: true
 
-- task: NuGetAuthenticate@1  # Authenticate with Azure Artifacts
+- task: NuGetAuthenticate@1
   displayName: 'Authenticate with Azure Artifacts'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Push to Feed'
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'StringExtensions-AzureDevOps/YogenLab4Feed'
-    arguments: '--skip-duplicate'
-    allowPackageConflicts: true
-
-- task: PublishBuildArtifacts@1  # Publish build artifacts
-  displayName: 'Publish Artifact'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
+# Debug: List files in staging
+- script: |
