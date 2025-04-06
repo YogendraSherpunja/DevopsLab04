@@ -16,7 +16,7 @@ variables:
   Patch: '0'
   PackageVersion: '$(Major).$(Minor).$(Patch)'  # Version for the NuGet package
   dotNetVersion: '8.0.x'  # .NET 8 version
-  projectPath: 'lab-04/lab-04.csproj'  # Path to your project file (update if needed)
+  projectPath: 'StringExtensions/StringExtensions.csproj'  # Path to your project file (update if needed)
 
 steps:
 - task: UseDotNet@2
