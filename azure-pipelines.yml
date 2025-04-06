@@ -17,7 +17,7 @@ variables:
   PackageVersion: '$(Major).$(Minor).$(Patch)'  # Version for the NuGet package
   dotNetVersion: '8.0.x'  # .NET 8 version
   projectPath: 'StringExtensions/StringExtensions.csproj'  # Path to your project file (update if needed)
-
+  POWERSHELL_DISTRIBUTION_CHANNEL: 'C:\Windows\System32\WindowsPowerShell\v1.0'
 steps:
 - task: UseDotNet@2
   displayName: 'Install .NET 8 SDK'
