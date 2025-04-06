@@ -60,13 +60,13 @@ steps:
 - task: NuGetAuthenticate@1  # Authenticate with Azure Artifacts
   displayName: 'Authenticate with Azure Artifacts'
 
-- task: NuGetCommand@2  # Push package to feed
+- task: NuGetCommand@2
   displayName: 'Push'
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'YogenLab4Feed'  # Update to your actual feed
+    publishVstsFeed: 'StringExtensions-AzureDevOps/YogenLab4Feed'  # Project/Feed format
     allowPackageConflicts: true
 
 - task: PublishBuildArtifacts@1  # Publish build artifacts
