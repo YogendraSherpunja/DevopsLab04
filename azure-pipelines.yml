@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   Major: '1'
   Minor: '0'
-  Patch: '2'
+  Patch: '3'
   PackageVersion: '$(Major).$(Minor).$(Patch)'  # Version for the NuGet package
   dotNetVersion: '8.0.x'  # .NET 8 version
   projectPath: 'StringExtensions/StringExtensions.csproj'  # Path to your project file
