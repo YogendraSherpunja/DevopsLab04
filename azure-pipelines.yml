@@ -67,6 +67,7 @@ steps:
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: 'StringExtensions-AzureDevOps/YogenLab4Feed'
+    arguments: '--skip-duplicate'
     allowPackageConflicts: true
 
 - task: PublishBuildArtifacts@1  # Publish build artifacts
