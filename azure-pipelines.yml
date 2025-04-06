@@ -66,7 +66,7 @@ steps:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'YogenLab4Feed'  # Update to your actual feed
+    publishVstsFeed: 'YogendraDevOps2025/YogenLab4Feed'  # Update to your actual feed
     allowPackageConflicts: true
 
 - task: PublishBuildArtifacts@1  # Publish build artifacts
