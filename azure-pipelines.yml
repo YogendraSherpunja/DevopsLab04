@@ -19,11 +19,13 @@ variables:
   projectPath: 'lab-04/lab-04.csproj'  # Path to your project file (update if needed)
 
 steps:
-- task: UseDotNet@2  # Install .NET 8 SDK
+- task: UseDotNet@2
   displayName: 'Install .NET 8 SDK'
-  inputs: 
-    version: '$(dotNetVersion)'
+  inputs:
+    version: '8.0.x'
     packageType: 'sdk'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
 
 - task: DotNetCoreCLI@2  # Restore packages
   displayName: 'Restore'
