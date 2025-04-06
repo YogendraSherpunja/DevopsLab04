@@ -9,28 +9,60 @@ trigger:
 pool:
   name: 'COMP367-Windows'
 
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
+variables: 
   buildConfiguration: 'Release'
+  Major: '1'
+  Minor: '0'
+  Patch: '0'
+  PackageVersion: '$(Major).$(Minor).$(Patch)'  # Version for the NuGet package
+  dotNetVersion: '8.0.x'  # .NET 8 version
+  projectPath: 'lab-04/lab-04.csproj'  # Path to your project file (update if needed)
 
 steps:
-- task: NuGetToolInstaller@1
+- task: UseDotNet@2  # Install .NET 8 SDK
+  displayName: 'Install .NET 8 SDK'
+  inputs: 
+    version: '$(dotNetVersion)'
+    packageType: 'sdk'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet restore'
-  inputs:
+- task: DotNetCoreCLI@2  # Restore packages
+  displayName: 'Restore'
+  inputs: 
     command: 'restore'
-    projects: '$(solution)'
+    projects: '$(projectPath)'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2  # Build the solution
+  displayName: 'Build'
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    projects: '$(projectPath)'
+    arguments: '--configuration $(buildConfiguration)'
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2  # Create NuGet package
+  displayName: 'Pack'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'pack'
+    packagesToPack: '$(projectPath)'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'PackageVersion'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    nobuild: true  # Skip build since it's already done
+
+- task: NuGetAuthenticate@1  # Authenticate with Azure Artifacts
+  displayName: 'Authenticate with Azure Artifacts'
+
+- task: NuGetCommand@2  # Push package to feed
+  displayName: 'Push'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'string-utilities-project/Lab4Feed2'  # Update to your actual feed
+    allowPackageConflicts: true
+
+- task: PublishBuildArtifacts@1  # Publish build artifacts
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+
