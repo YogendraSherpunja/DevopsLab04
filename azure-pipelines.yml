@@ -63,3 +63,22 @@ steps:
 
 # Debug: List files in staging
 - script: |
+    echo "Listing files in staging directory:"
+    dir $(Build.ArtifactStagingDirectory)
+  displayName: 'Check staged files before push'
+
+# FIXED push using NuGetCommand instead of DotNetCoreCLI
+- task: NuGetCommand@2
+  displayName: 'Push to Feed (NuGetCommand)'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+    publishVstsFeed: 'StringExtensions-AzureDevOps/YogenLab4Feed'
+    allowPackageConflicts: true
+    arguments: '--skip-duplicate'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
